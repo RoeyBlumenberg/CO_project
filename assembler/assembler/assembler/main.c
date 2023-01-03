@@ -15,11 +15,11 @@ int main(int argc, char *argv[]) {
 	asm_file =fopen( "fib.asm", "r");
 	first_pass(asm_file, Labels);
 	second_pass(asm_file, Instructions, Words);
-	close_file(asm_file);
+	fclose(asm_file);
 	// write to memin.txt
-	memin = open_file("memim.txt", "w");
+	memin = fopen("memim.txt", "w");
 	print_memin(memin, Instructions, Labels);
-	close_file(memin);
+	fclose(memin);
 	// write to dmemin.txt
 	//dmemin = open_file(argv[3], "w");
 	//print_dmem(dmemin, Words);

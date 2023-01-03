@@ -5,7 +5,7 @@
 #include <stdbool.h>
 
 // define constants
-#define OPCODES_NUM 22 // num of opcodes accroding to the project instructions
+#define OPCODES_NUM 19 // num of opcodes accroding to the project instructions
 #define REGISTERS_NUM 16 // num of registers accroding to the project instructions
 #define MAX_OPCODE_NAME_LEN 4 // max num of chars in instruction name
 #define MAX_REG_NAME_LEN 5 // max num of chars in register name

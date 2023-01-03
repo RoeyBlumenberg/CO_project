@@ -55,10 +55,10 @@ typedef struct RegisterFile_ {
 	int PC;
 	char INST[MAX_LINE_LEN_HEX];
 	int regs[NUM_OF_REGS];
-	int IOregs[NUM_OF_IO_REGS];
-	int prev_leds;//check if rellevant
+//	int IOregs[NUM_OF_IO_REGS];//check if rellevant
+//	int prev_leds;//check if rellevant
 	int instructions_count;
-	bool busy_with_interrupt;
+//	bool busy_with_interrupt;//check if rellevant
 } RegisterFile;
 
 typedef struct Monitor_ {

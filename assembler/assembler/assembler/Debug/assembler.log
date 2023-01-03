@@ -1,14 +1,82 @@
 ﻿  assembler.c
-  main.c
-c:\users\user\desktop\project\assembler\assembler\assembler\main.c(12): warning C4013: 'init_Labels' undefined; assuming extern returning int
-c:\users\user\desktop\project\assembler\assembler\assembler\main.c(13): warning C4013: 'init_Instructions' undefined; assuming extern returning int
-c:\users\user\desktop\project\assembler\assembler\assembler\main.c(14): warning C4013: 'init_Words' undefined; assuming extern returning int
-c:\users\user\desktop\project\assembler\assembler\assembler\main.c(15): warning C4013: 'open_file' undefined; assuming extern returning int
-c:\users\user\desktop\project\assembler\assembler\assembler\main.c(15): warning C4047: '=': 'FILE *' differs in levels of indirection from 'int'
-c:\users\user\desktop\project\assembler\assembler\assembler\main.c(17): warning C4013: 'first_pass' undefined; assuming extern returning int
-c:\users\user\desktop\project\assembler\assembler\assembler\main.c(18): warning C4013: 'second_pass' undefined; assuming extern returning int
-c:\users\user\desktop\project\assembler\assembler\assembler\main.c(19): warning C4013: 'close_file' undefined; assuming extern returning int
-c:\users\user\desktop\project\assembler\assembler\assembler\main.c(21): warning C4047: '=': 'FILE *' differs in levels of indirection from 'int'
-c:\users\user\desktop\project\assembler\assembler\assembler\main.c(22): warning C4013: 'print_memin' undefined; assuming extern returning int
-  Generating Code...
-  assembler.vcxproj -> C:\Users\USER\Desktop\project\assembler\assembler\Debug\assembler.exe
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(338): error C2143: syntax error: missing ';' before '{'
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(347): error C2065: 'word': undeclared identifier
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(347): error C2223: left of '->address' must point to struct/union
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(347): warning C4473: 'sscanf' : not enough arguments passed for format string
+  c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(347): note: placeholders and their parameters expect 1 variadic arguments, but 0 were provided
+  c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(347): note: the missing variadic argument 1 is required by format string '%x'
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(350): error C2065: 'word': undeclared identifier
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(350): error C2223: left of '->address' must point to struct/union
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(350): warning C4473: 'sscanf' : not enough arguments passed for format string
+  c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(350): note: placeholders and their parameters expect 1 variadic arguments, but 0 were provided
+  c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(350): note: the missing variadic argument 1 is required by format string '%d'
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(355): error C2065: 'word': undeclared identifier
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(355): error C2223: left of '->data' must point to struct/union
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(355): warning C4473: 'sscanf' : not enough arguments passed for format string
+  c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(355): note: placeholders and their parameters expect 1 variadic arguments, but 0 were provided
+  c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(355): note: the missing variadic argument 1 is required by format string '%x'
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(358): error C2065: 'word': undeclared identifier
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(358): error C2223: left of '->data' must point to struct/union
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(358): warning C4473: 'sscanf' : not enough arguments passed for format string
+  c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(358): note: placeholders and their parameters expect 1 variadic arguments, but 0 were provided
+  c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(358): note: the missing variadic argument 1 is required by format string '%d'
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(365): error C2065: 'word': undeclared identifier
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(365): error C2223: left of '->is_valid' must point to struct/union
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(373): error C2143: syntax error: missing ';' before '{'
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(380): error C2065: 'file': undeclared identifier
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(380): warning C4047: 'function': 'FILE *' differs in levels of indirection from 'int'
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(380): warning C4024: 'feof': different types for formal and actual parameter 1
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(380): warning C4024: 'fgets': different types for formal and actual parameter 3
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(394): error C2065: 'Labels': undeclared identifier
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(394): error C2109: subscript requires array or pointer type
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(398): error C2063: 'is_imm_command': not a function
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(413): error C2065: 'file': undeclared identifier
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(413): warning C4047: 'function': 'FILE *' differs in levels of indirection from 'int'
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(413): warning C4024: 'rewind': different types for formal and actual parameter 1
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(421): error C2143: syntax error: missing ';' before '{'
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(438): error C2065: 'file': undeclared identifier
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(438): warning C4047: 'function': 'FILE *' differs in levels of indirection from 'int'
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(438): warning C4024: 'feof': different types for formal and actual parameter 1
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(438): warning C4024: 'fgets': different types for formal and actual parameter 3
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(447): warning C4020: 'is_Label': too many actual parameters
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(448): error C2063: 'is_imm_command': not a function
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(455): error C2065: 'Words': undeclared identifier
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(455): error C2109: subscript requires array or pointer type
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(459): error C2065: 'instructions': undeclared identifier
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(459): error C2109: subscript requires array or pointer type
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(473): error C2143: syntax error: missing ';' before '{'
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(477): error C2065: 'instructions': undeclared identifier
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(477): error C2109: subscript requires array or pointer type
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(478): error C2065: 'instructions': undeclared identifier
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(478): error C2109: subscript requires array or pointer type
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(478): error C2198: 'get_opcode': too few arguments for call
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(479): error C2065: 'instructions': undeclared identifier
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(479): error C2109: subscript requires array or pointer type
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(479): error C2198: 'get_register': too few arguments for call
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(480): error C2065: 'instructions': undeclared identifier
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(480): error C2109: subscript requires array or pointer type
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(480): error C2198: 'get_register': too few arguments for call
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(481): error C2065: 'instructions': undeclared identifier
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(481): error C2109: subscript requires array or pointer type
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(481): error C2198: 'get_register': too few arguments for call
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(482): error C2065: 'instructions': undeclared identifier
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(482): error C2109: subscript requires array or pointer type
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(482): error C2198: 'is_label_operand': too few arguments for call
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(484): error C2065: 'instructions': undeclared identifier
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(484): error C2109: subscript requires array or pointer type
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(484): error C2065: 'labels': undeclared identifier
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(484): warning C4047: 'function': 'char *' differs in levels of indirection from 'int'
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(484): warning C4024: 'get_label': different types for formal and actual parameter 1
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(484): error C2198: 'get_label': too few arguments for call
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(487): error C2065: 'instructions': undeclared identifier
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(487): error C2109: subscript requires array or pointer type
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(487): error C2198: 'get_imm': too few arguments for call
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(489): error C2065: 'memin': undeclared identifier
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(489): warning C4047: 'function': 'FILE *const ' differs in levels of indirection from 'int'
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(489): warning C4024: 'fprintf': different types for formal and actual parameter 1
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(490): error C2065: 'instructions': undeclared identifier
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(490): error C2109: subscript requires array or pointer type
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(491): error C2065: 'memin': undeclared identifier
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(491): warning C4047: 'function': 'FILE *const ' differs in levels of indirection from 'int'
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(491): warning C4024: 'fprintf': different types for formal and actual parameter 1
+c:\users\user\desktop\project_computer_organization2\assembler\assembler\assembler\assembler.c(332): fatal error C1075: '{': no matching token found

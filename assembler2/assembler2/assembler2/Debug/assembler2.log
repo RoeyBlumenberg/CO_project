@@ -1,0 +1,5 @@
+﻿  assembler2.c
+c:\users\user\desktop\project_computer_organization2\assembler2\assembler2\assembler2\assembler2.c(447): warning C4020: 'is_Label': too many actual parameters
+  main.c
+  Generating Code...
+  assembler2.vcxproj -> C:\Users\USER\Desktop\project_computer_organization2\assembler2\assembler2\Debug\assembler2.exe

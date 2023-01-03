@@ -6,7 +6,7 @@
 #include <ctype.h>
 #include <math.h>
 #include "simulator.h"
-//test//
+
 // input - a variable of type Data Memory
 // output - none
 // a function that initializes a data memory type variable
@@ -26,44 +26,21 @@ void init_InstructionMemory(InstructionMemory* Instruction_Memory) {
 		Instruction_Memory[i].write_readonly_IOregs = false;//check if rellevant
 	}
 }
-#if 0
-// input - a variable of type Hard Drive
-// output - none
-// a function that initializes a Hard Drive type variable
-void init_HardDrive(HardDrive *hard_drive) {
-	for (int i = 0; i < NUM_OF_SECTORS; i++) {
-		for (int j = 0; j < NUM_OF_WORDS_IN_SECTOR; j++) {
-			hard_drive->sectors[i][j] = 0;
-		}
-	}
-}
 
-// input - a variable of type Monitor
-// output - none
-// a function that initializes a Monitor type variable
-void init_Monitor(Monitor *monitor) {
-	for (int i = 0; i < X_PIXELS; i++) {
-		for (int j = 0; j < Y_PIXELS; j++) {
-			monitor->frame_buffer[i][j] = 0;
-		}
-	}
-}
-
-#endif
 // input - a variable of type Register File
 // output - none
 // a function that initializes a Register File type variable
 void init_RegisterFile(RegisterFile* file_registers) {
 	file_registers->PC = 0;
-	file_registers->prev_leds = 0;//check if rellevant
+//	file_registers->prev_leds = 0;//check if rellevant
 	file_registers->instructions_count = 0;
-	file_registers->busy_with_interrupt = false;//check if rellevant
+//	file_registers->busy_with_interrupt = false;//check if rellevant
 	for (int i = 0; i < NUM_OF_REGS; i++) {
 		file_registers->regs[i] = 0;
 	}
-	for (int j = 0; j < NUM_OF_IO_REGS; j++) {//check if rellevant
+/*	for (int j = 0; j < NUM_OF_IO_REGS; j++) {//check if rellevant
 		file_registers->IOregs[j] = 0;
-	}
+	}*/
 }
 
 // Input - file name to open and opening mode: "r" or "w"
@@ -129,15 +106,15 @@ bool is_empty_line(char *line) {
 // a function that determines whether a command contains a constant "imm" or not.
 bool is_imm_command(char *line, int opcode) {
 	char *line_ptr = line;
-	line_ptr += 2; // jump over the bits relates to opcode
+	line_ptr += 2; // jump over the chars relates to opcode
 	if (opcode == 15) {
 		return (*(line_ptr) == '1');
 	}
-	else if (opcode == 21 || opcode == 18) {
+	else if (opcode == 18) {
 		return false;
 	}
 	else {
-		return (strstr(line_ptr, "1") != NULL);
+		return (strstr(line_ptr, "1") != NULL);//return true if there is $imm register in the instruction
 	}
 }
 // input - a pointer to the opcode number and a line string.
@@ -147,7 +124,7 @@ void get_opcode(int* opcode, char* line) {
 	char temp[LEN_IMEM_LINE];
 	copy_n_chars(line, temp, 2);
 	sscanf(temp, "%x", opcode);
-	if (*opcode > 21 || *opcode < 0) {//we need to check the numbers
+	if (*opcode > 15 || *opcode < 0) {
 		printf("Not valid opcode\n");
 	}
 }
@@ -272,7 +249,7 @@ void attempt_change_read_only_regs(RegisterFile *Register_file, InstructionMemor
 	instruction_memory[Register_file->PC].write_reg0_or_reg1 = ((opcode <= 8 && opcode >= 0) || opcode == 16 || opcode == 19) && (rd == 0 || rd == 1);
 	instruction_memory[Register_file->PC].write_readonly_IOregs = (opcode == 20) && (num_IOreg == clks || num_IOreg == reserved || num_IOreg == diskstatus); // these IOregs are read only registers.
 }
-// the next 21 functions are responsible of executing an operation.
+// the next 19 functions are responsible of executing an operation.
 //each function executes the operation its name indicates.
 
 void add(RegisterFile *Register_file, InstructionMemory *Instruction_memory, int rd, int rs, int rt) {
@@ -522,6 +499,7 @@ void out(RegisterFile *Register_file, InstructionMemory *Instruction_memory, Dat
 	}
 	PC_incrementation(Register_file, Instruction_memory[Register_file->PC].is_imm_cmd);
 }
+#endif
 // input - a pointer to a data memory type variable, a pointer to an instruction_memory type variable, a pointer to a register file type variable, a pointer to a monitor type variable, a pointer to a hard drive type variable and a file pointer to the file "hwregtrace".
 //output - none
 //the function executes an instruction according to the opcode using a function for each opcode.
@@ -539,16 +517,16 @@ void execute_instruction(RegisterFile *Register_file, DataMemory *Data_memory, I
 		sub(Register_file, Instruction_memory, rd, rs, rt);
 		break;
 	case 2:
-		and (Register_file, Instruction_memory, rd, rs, rt);
+		mul (Register_file, Instruction_memory, rd, rs, rt);
 		break;
 	case 3:
-		or (Register_file, Instruction_memory, rd, rs, rt);
+		and (Register_file, Instruction_memory, rd, rs, rt);
 		break;
 	case 4:
-		xor (Register_file, Instruction_memory, rd, rs, rt);
+		or (Register_file, Instruction_memory, rd, rs, rt);
 		break;
 	case 5:
-		mul(Register_file, Instruction_memory, rd, rs, rt);
+		xor(Register_file, Instruction_memory, rd, rs, rt);
 		break;
 	case 6:
 		sll(Register_file, Instruction_memory, rd, rs, rt);
@@ -557,7 +535,7 @@ void execute_instruction(RegisterFile *Register_file, DataMemory *Data_memory, I
 		sra(Register_file, Instruction_memory, rd, rs, rt);
 		break;
 	case 8:
-		srl(Register_file, Instruction_memory, rd, rs, rt); //check!
+		srl(Register_file, Instruction_memory, rd, rs, rt); 
 		break;
 	case 9:
 		beq(Register_file, Instruction_memory, rd, rs, rt);
@@ -587,23 +565,14 @@ void execute_instruction(RegisterFile *Register_file, DataMemory *Data_memory, I
 		sw(Register_file, Instruction_memory, Data_memory, rd, rs, rt);
 		break;
 	case 18:
-		reti(Register_file);
-		break;
-	case 19:
-		in(Register_file, Instruction_memory, hwregtrace, rd, rs, rt);
-		break;
-	case 20:
-		out(Register_file, Instruction_memory, Data_memory, hard_drive, hwregtrace, monitor, rd, rs, rt);
-		break;
-	case 21: // create function that exits simulator!
-		break;
+		break;// create function that exits simulator!
 	default:
 		/*/ in case we have to deal with invalid opcode, the current data in regs does not change
 			and we just increment PC according the type of the instruction./*/
 		PC_incrementation(Register_file, is_imm_cmd);
 	}
 }
-#endif
+
 // input - file pointer to the file to which we wish to print and a pointer to a register file type variable
 // output - none
 // the function prints the next line in to the file "trace" in the format specified
@@ -695,58 +664,54 @@ void handle_instruction(DataMemory *data_memory, InstructionMemory *instruction_
 	}
 	print_trace(trace, register_file);
 	register_file->instructions_count++;
-	clks_handle(register_file);
-	disk_check(register_file, hard_drive);
-	timer_handle(register_file);
+//	clks_handle(register_file);
+//	disk_check(register_file, hard_drive);
+//	timer_handle(register_file);
 	attempt_change_read_only_regs(register_file, instruction_memory);
 	execute_instruction(register_file, data_memory, instruction_memory, monitor, hard_drive, hwregtrace);
-	leds_handle(register_file, leds_file);
+//	leds_handle(register_file, leds_file);
 }
 
 // input - a pointer to the "trace" file to pass to internal functions (such as "execute instruction")
 // an Instruction Memory variable which holds the instructions for the functions to read
 // a register File variable in which we have all register values and other variables (such as PC)
 // a Data Memory variable which holds the data memory for the function to use while executing instructions
-// an "irq2_in" file pointer to check for interrupts
-// a hard drive variable which holds disk's content to use for disk interrupts
-// a "leds" pointer file to use in case of leds activation
-// a "hwregtrace" pointer file to use for tracing IO regs values
 // output - none
 // this function is the core of the simulator's operation, it manages the execution of instructions. the function passes through instructions (which are saved as a "instruction memory" variable) and executes the instructions whilst managing interuppts handling.
-void IMEMIN_pass(FILE *trace, InstructionMemory *instruction_memory, RegisterFile *register_file, DataMemory *data_memory, FILE *irq2_in, Monitor *monitor, HardDrive *hard_drive, FILE *leds_file, FILE *hwregtrace) {
-	int current_irq2;
-	irq2in_read(register_file, irq2_in, &current_irq2);
-	while (instruction_memory[register_file->PC].is_valid && instruction_memory[register_file->PC].instruction.opcode != 21) {
-		irq2in_handle(register_file, &current_irq2, irq2_in);
+void MEMIN_pass(FILE *trace, InstructionMemory *instruction_memory, RegisterFile *register_file, DataMemory *data_memory, FILE *irq2_in, Monitor *monitor, HardDrive *hard_drive, FILE *leds_file, FILE *hwregtrace) {
+//	int current_irq2;
+//	irq2in_read(register_file, irq2_in, &current_irq2);
+	while (instruction_memory[register_file->PC].is_valid && instruction_memory[register_file->PC].instruction.opcode != 18) {
+//		irq2in_handle(register_file, &current_irq2, irq2_in);
 		strcpy(register_file->INST, instruction_memory[register_file->PC].INST);
-		if (is_interrupt(register_file) && !register_file->busy_with_interrupt) { // there is an interrupt and we are not busy with another interrupt
+//do we need this ifif (is_interrupt(register_file) && !register_file->busy_with_interrupt) { // there is an interrupt and we are not busy with another interrupt
 			if (instruction_memory[register_file->PC].is_imm_cmd) { // there is an interrupt but we in a middle of imm instruction
 				handle_instruction(data_memory, instruction_memory, register_file, trace, monitor, hard_drive, hwregtrace, leds_file);
-				interrupt_handle(register_file);
-				clks_handle(register_file);
-				disk_check(register_file, hard_drive);
-				timer_handle(register_file);
-				register_file->IOregs[irq2status] = 0;
-				leds_handle(register_file, leds_file);
+//				interrupt_handle(register_file);
+//				clks_handle(register_file);
+//				disk_check(register_file, hard_drive);
+//				timer_handle(register_file);
+//				register_file->IOregs[irq2status] = 0;
+//				leds_handle(register_file, leds_file);
 				continue;
 			}
 			else {
-				interrupt_handle(register_file);
+//				interrupt_handle(register_file);
 			}
 		}
 		else {
 			int current_PC = register_file->PC;
 			handle_instruction(data_memory, instruction_memory, register_file, trace, monitor, hard_drive, hwregtrace, leds_file);
 			if (instruction_memory[current_PC].is_imm_cmd) {
-				irq2in_handle(register_file, &current_irq2, irq2_in);
-				if (is_interrupt(register_file) && !register_file->busy_with_interrupt) {
-					interrupt_handle(register_file);
+//				irq2in_handle(register_file, &current_irq2, irq2_in);
+//Do we need this if?				if (is_interrupt(register_file) && !register_file->busy_with_interrupt) {
+//					interrupt_handle(register_file);
 				}
-				clks_handle(register_file);
-				disk_check(register_file, hard_drive);
-				timer_handle(register_file);
-				register_file->IOregs[irq2status] = 0;
-				leds_handle(register_file, leds_file);
+//				clks_handle(register_file);
+//				disk_check(register_file, hard_drive);
+//				timer_handle(register_file);
+//				register_file->IOregs[irq2status] = 0;
+//				leds_handle(register_file, leds_file);
 			}
 		}
 	}
@@ -755,10 +720,10 @@ void IMEMIN_pass(FILE *trace, InstructionMemory *instruction_memory, RegisterFil
 	return;
 }
 
-// input - a file pointer to the imemin file, a pointer to an instruction memory type variable and a poiter to a register file type variable
+// input - a file pointer to the memin file, a pointer to an instruction memory type variable and a poiter to a register file type variable
 // output - none
-// the function reads from imemin and saves the instruction memory into a destined instruction memory variable
-void read_imemin(FILE *file, InstructionMemory* Instruction_Memory, RegisterFile *Register_file) {
+// the function reads from memin and saves the instruction memory into a destined instruction memory variable
+void read_memin(FILE *file, InstructionMemory* Instruction_Memory, RegisterFile *Register_file) {
 	char line[LEN_IMEMIN_LINE + 2];
 	int instructions_count = 0;
 	while (!feof(file) && fgets(line, LEN_IMEMIN_LINE + 2, file)) {
@@ -844,10 +809,10 @@ void print_regout(FILE *regout, RegisterFile Register_File) {
 }
 // input - pointer to a file to which we want to print and a Register_File variable
 // output - none
-// a function that prints the number of cycles and instructions executed in the end of the simulator's operation
+// a function that prints the number of cycles in the end of the simulator's operation
 void print_cycles(FILE *cycles, RegisterFile Register_File) {
 	fprintf(cycles, "%d\n", Register_File.IOregs[clks]);
-	fprintf(cycles, "%d\n", Register_File.instructions_count);
+	fprintf(cycles, "%d\n", Register_File.instructions_count);//We not need this value
 }
 
 #if 0

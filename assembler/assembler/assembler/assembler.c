@@ -6,7 +6,6 @@
 #include <string.h>
 #include <ctype.h>
 #include <math.h>
-//test//
 #include "assembler.h"
 
 // Input - file name to open and opening mode: "r" or "w"
@@ -99,91 +98,6 @@ bool is_hex(char *str)
 	return false;
 }
 
-#if 0
-// Input - int that represent imm value.
-// Output - true if the imm is in range [-2^19, 2^19 - 1], else false.
-bool is_legal_imm(int imm_value) {
-	if (imm_value >= -1 * pow(2, IMM_BITS - 1) && imm_value <= pow(2, IMM_BITS - 1) - 1) {
-		return true;
-	}
-	return false;
-}
-
-// Input - int that represent imm value.
-// Output - int value for the "correct" imm.
-// the fucntion change the value of "imm" so it will be in range [0, 2^20 - 1] for unsigned int or in range [-2^19, 2^19 - 1]
-int handle_imm(int imm_value) {
-	if (is_legal_imm(imm_value)) {
-		return imm_value;
-	}
-	else {
-		printf("Overflow, imm value was normalized\n");
-		if (imm_value < -1 * pow(2, IMM_BITS - 1)) {
-			while (imm_value < -1 * pow(2, IMM_BITS - 1)) {
-				imm_value += (int)pow(2, IMM_BITS - 1);
-			}
-			return imm_value;
-		}
-		if (imm_value > pow(2, IMM_BITS - 1) - 1) {
-			while (imm_value > pow(2, IMM_BITS - 1) - 1) {
-				imm_value -= (int)pow(2, IMM_BITS - 1) - 1;
-			}
-			return imm_value;
-		}
-	}
-	return imm_value;
-}
-
-
-// Input - int that represent data value in .word command.
-// Output - int value for the "correct" data.
-// the fucntion change the value of "data" so it will be in range [0, 2^32 - 1] for unsigned int or in range [-2^31, 2^31 - 1]
-int handle_data(int data_value) {
-	if (is_legal_data(data_value)) {
-		return data_value;
-	}
-	else {
-		printf("Overflow, .word data value was normalized\n");
-		if (data_value < -1 * pow(2, DATA_BITS - 1)) {
-			while (data_value < -1 * pow(2, DATA_BITS - 1)) {
-				data_value += (int)pow(2, DATA_BITS - 1);
-			}
-			return data_value;
-		}
-		if (data_value > pow(2, DATA_BITS - 1) - 1) {
-			while (data_value > pow(2, DATA_BITS - 1) - 1) {
-				data_value -= (int)pow(2, DATA_BITS - 1) - 1;
-			}
-			return data_value;
-		}
-	}
-	return data_value;
-}
-
-
-
-
-// Input - int that represent address value in .word command.
-// Output - true if the address is in range [0, 4095], else false.
-bool is_legal_address(int address) {
-	return (address >= 0 && address <= NUM_DMEM_LINES - 1);
-}
-
-// Input - int that represent address value in .word command.
-// Output - int value for the "correct" address.
-// the fucntion change the value of "adderss" so it will be in range [0, 4095]
-int handle_address(int address) {
-	if (is_legal_address(address)) {
-		return address;
-	}
-	else {
-		printf("Overflow, .word address value was normalized\n");
-		address = abs(address % NUM_DMEM_LINES);
-	}
-}
-#endif 
-
-
 // Input - name of opcode, such as: "add", "sub", "mul" etc.
 // Output - corresponding opcode number.
 //Function - recives name of opcode and returns the int opcode number.
@@ -191,14 +105,14 @@ int get_opcode(char *opcode) {
 	int i = 0;
 	to_lower(opcode);
 	char *opcodes[] = { "add", "sub", "mul", "and", "or", "xor", "sll", "sra", "srl", "beq", "bne", "blt", "bgt", "ble", "bge", "jal",
-							"lw", "sw", "reti", "in", "out", "halt" };
+							"lw", "sw", "halt" };
 	for (i = 0; i < OPCODES_NUM; i++) {
 		if (strcmp(opcode, opcodes[i]) == 0) {
 			return i;
 		}
 	}
 	printf("There is an incorrect command!, replaced with exit command - 'halt'\n"); // in case we got an invalid opcode -> return opcode = halt.
-	return 21;
+	return 18;
 }
 
 // Input - name of registr, such as: "$zero", "$imm", "$t0" etc.
@@ -207,7 +121,7 @@ int get_opcode(char *opcode) {
 int get_register(char *reg) {
 	int i = 0;
 	to_lower(reg);
-	char *registers[16] = { "$zero", "$imm", "$v0", "$a0", "$a1", "$t0", "$t1", "$t2", "$t3", "$s0", "$s1", "$s2", "$gp", "$sp", "$fp", "$ra" };
+	char *registers[16] = { "$zero", "$imm", "$v0", "$a0", "$a1", "$a2", "$a3", "$t0", "$t1", "$t2", "$s0", "$s1", "$s2", "$gp", "$sp", "$ra" };
 	for (i = 0; i < REGISTERS_NUM; i++) {
 		if (strcmp(reg, registers[i]) == 0) {
 			return i;
@@ -226,12 +140,10 @@ int get_imm(char *imm) {
 	to_lower(imm);
 	if (is_hex(imm)) {
 		sscanf(imm, "%x", &imm_value);
-		//imm_value = handle_imm(imm_value);//Check what omkar will say about it.
 		return imm_value;
 	}
 	else {
 		sscanf(imm, "%d", &imm_value);
-		//imm_value = handle_imm(imm_value);
 		return imm_value;
 	}
 }
@@ -281,9 +193,9 @@ char *delete_whitespaces(char *str) {
 
 // Input - arg1 and arg2 indicate if line contains :, # accordingly, arg3 and arg4 are pointers to the first occurence of :, # in line, accordingly.
 // Output - true if the line is label line, else false.
-// Function - Helps us to know if Label line by: if it contains (: and !#) or the place(: < #)
-bool is_Label(bool contains_colon, bool contains_hash, char* colon_ptr, char* hash_ptr) {
-	return ((contains_colon && !contains_hash) || ((contains_colon) && (colon_ptr < hash_ptr)));
+// Function - Helps us to know if Label line by: if it contains (: and !#).
+bool is_Label(bool contains_colon, bool contains_hash /*,char* colon_ptr, char* hash_ptr*/) {
+	return (contains_colon && !contains_hash);
 }
 
 // Input - a char we want to be searched, line to be scanned and NULL pointer.
@@ -294,19 +206,15 @@ bool is_contain_char(char* line, char* char_to_find, char** char_ptr) {
 	return (*char_ptr != NULL);
 }
 
-//////////////////////////////////////we need to check this function///////////////////////////////////////////
 // Input - arg1 and arg2 indicate if line contains #, $imm accordingly, arg3 and arg4 are pointers to the first occurence of #, $imm in line, accordingly.
 // Output - returns true if the line is imm command, else false.
-#if 1
 bool is_imm_command(char *line, bool contains_hash, bool contains_imm, char* imm_ptr, char* hash_ptr) {
 	char *halt_ptr = strstr(line, "halt");
 	char *jal_ptr = strstr(line, "jal");
-	char *reti_ptr = strstr(line, "reti");
 	char *comma_ptr = strstr(line, ",");
 	bool halt_command = (!contains_hash && halt_ptr != NULL) || (contains_hash && halt_ptr != NULL && halt_ptr < hash_ptr);
 	bool jal_command = (!contains_hash && jal_ptr != NULL) || (contains_hash && jal_ptr != NULL && jal_ptr < hash_ptr);
-	bool reti_command = (!contains_hash && reti_ptr != NULL) || (contains_hash && reti_ptr != NULL && reti_ptr < hash_ptr);
-	if (halt_command || reti_command) {
+	if (halt_command) {
 		return false;
 	}
 	else if (jal_command) {
@@ -321,7 +229,7 @@ bool is_imm_command(char *line, bool contains_hash, bool contains_imm, char* imm
 		return (!contains_hash && contains_imm) || (contains_hash && contains_imm && imm_ptr < hash_ptr);
 	}
 }
-#endif 
+
 // Input - line string.
 // Output - returns true if the line is empty, else false.
 // Function that search if line contains only whitespaces.Search for: ' ' - space , '\n' - newline , '\t' - horizontal tab ,'\v' - vertical tab ,
@@ -334,7 +242,7 @@ bool is_empty_line(char *line) {
 	}
 	return true;
 }
-
+#if 0
 // Input - line string and a boolean variable which tells us if the line contains label.
 // Output - returns true if the line cotains label and command, for examaple: "L1:  add &s0, &zero, %zero, 0", else false.
 bool is_label_and_command(char *line, bool is_label) {
@@ -371,7 +279,7 @@ bool is_label_and_word_command(char *line, bool is_label) {
 	}
 	return false;
 }
-
+#endif
 // Input - opcode number and string that contains imm value.
 // Output - returns true if the line cotains label as an operand, else false.
 /*/ Function that checks whether the opcode may contain label as an operand (for example branch instructions) and check if the imm value is a label name or a constant numeric value
@@ -421,7 +329,7 @@ int jump_over_whitespaces(char *str) {
 // Input - line string, pointer to instruction struct and a boolean var that tells us whether the line contains an imm command.
 // Output - nothing, but change the instruction struct by using it's pointer.
 // Function to handle line instruction and parse the line to the relevant fields: opcode, rd, rs, rt, imm.
-void handle_line_instruction(char *line, Intruction *instruction, bool is_imm_command) {	char *temp = delete_whitespaces(line);	char *dollar_ptr = NULL;	is_contain_char(temp, "$", &dollar_ptr);	copy_str_by_delimiter(temp, instruction->opcode, '$');	strcpy(instruction->rd, strtok(dollar_ptr, ","));	strcpy(instruction->rs, strtok(NULL, ","));	strcpy(instruction->rt, strtok(NULL, ","));	strcpy(instruction->imm, strtok(NULL, "#"));	if (is_imm_command) {		instruction->is_imm_instruction = true;	}	else {		instruction->is_imm_instruction = false;	}	instruction->is_valid = true;}
+void handle_line_instruction(char *line, Intruction *instruction, bool is_imm_command) {	char *temp = delete_whitespaces(line);	char *dollar_ptr = NULL;	is_contain_char(temp, "$", &dollar_ptr);	copy_str_by_delimiter(temp, instruction->opcode, '$');	strcpy(instruction->rd, strtok(dollar_ptr, ","));	strcpy(instruction->rs, strtok(NULL, ","));//in order to get next token and to continue with the same string NULL is passed as first argument since strtok maintains a static pointer to your previous passed string:	strcpy(instruction->rt, strtok(NULL, ","));	strcpy(instruction->imm, strtok(NULL, "#"));	if (is_imm_command) {		instruction->is_imm_instruction = true;	}	else {		instruction->is_imm_instruction = false;	}	instruction->is_valid = true;}
 
 
 // Input - line string, pointer to .word struct.
@@ -434,24 +342,20 @@ void handle_word_instruction(char *line, Word_instruction *word) {
 	strcpy(temp, line + i);
 	if (strcmp(".word", strtok(temp, " ")) == 0) {
 		strcpy(temp, (strtok(NULL, " "))); //copying from word to #
-		strcpy(temp, temp + jump_over_whitespaces(temp));
+		strcpy(temp, temp + jump_over_whitespaces(temp));//we want to ignore the spaces before the address
 		if (is_hex(temp)) {
 			sscanf(temp, "%x", &word->address);
-			//word->address = handle_address(word->address);
 		}
 		else {
 			sscanf(temp, "%d", &word->address);
-			//word->address = handle_address(word->address);
 		}
 		strcpy(temp, strtok(NULL, "#"));
 		delete_whitespaces(temp);
 		if (is_hex(temp)) {
 			sscanf(temp, "%x", &word->data);
-			//word->data = handle_data(word->data);
 		}
 		else {
 			sscanf(temp, "%d", &word->data);
-			//word->data = handle_data(word->data);
 		}
 	}
 	else {
@@ -482,7 +386,7 @@ void first_pass(FILE *file, Label Labels[]) {
 		contains_hash = is_contain_char(lower_case_line, "#", &hash_ptr);
 		contains_imm = is_contain_char(lower_case_line, "$imm", &imm_ptr);
 		contains_colon = is_contain_char(lower_case_line, ":", &colon_ptr);
-		if (is_Label(contains_colon, contains_hash, colon_ptr, hash_ptr)) {
+		if (is_Label(contains_colon, contains_hash/*, colon_ptr, hash_ptr*/)) {
 			is_label = true;
 			copy_str_by_delimiter(line, label.name, ':');
 			label.address = PC;
@@ -490,7 +394,7 @@ void first_pass(FILE *file, Label Labels[]) {
 			Labels[i] = label;
 			i++;
 		}
-		if (!is_label || is_label_and_command(lower_case_line, is_label)) {
+		if (!is_label) {
 			if (is_imm_command(lower_case_line, contains_hash, contains_imm, imm_ptr, hash_ptr)) {
 				PC += 2;
 			}
@@ -542,19 +446,10 @@ void second_pass(FILE *file, Intruction instructions[], Word_instruction Words[]
 		contains_colon = is_contain_char(lower_case_line, ":", &colon_ptr);
 		is_label = is_Label(contains_colon, contains_hash, colon_ptr, hash_ptr);
 		is_imm_instruction = is_imm_command(lower_case_line, contains_hash, contains_imm, imm_ptr, hash_ptr);
-		if (is_label && !is_label_and_command(lower_case_line, is_label) && !is_label_and_word_command(lower_case_line, is_label)) {
+		if (is_label) {
 			continue;
 		}
-		else if (is_label_and_command(lower_case_line, is_label)) {  // the line contains a label and an instruction
-			handle_line_instruction(colon_ptr + 1, instruction, is_imm_instruction);
-			instructions[num_instruction] = *instruction; // add new intruction to MEMIN
-			num_instruction++;
-		}
-		else if (is_label_and_word_command(lower_case_line, is_label)) {
-			handle_word_instruction(colon_ptr + 1, word);
-			Words[word->address] = *word; // add new .word instruction to Words array.
-		}
-		else { // the line contains only an instruction.
+		else { // the line contains an instruction.
 			if (is_word_instruction(lower_case_line, contains_hash, hash_ptr)) {
 				handle_word_instruction(line, word);
 				Words[word->address] = *word; // add new .word instruction to Words array.
