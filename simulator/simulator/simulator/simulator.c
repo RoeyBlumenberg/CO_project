@@ -6,7 +6,7 @@
 #include <ctype.h>
 #include <math.h>
 #include "simulator.h"
-
+//test//
 // input - a variable of type Data Memory
 // output - none
 // a function that initializes a data memory type variable
